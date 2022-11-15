@@ -1,7 +1,7 @@
 # ESPHome-SpotifyNowPlaying
 
 ## Idea
-Make a Music Jukebox which integrates with Home Assistant using ESPHome and off-the0shelf components. This is intended as a Christmas present for my partner who stated she had never received a mixtape when she was younger.
+Make a Music Jukebox which integrates with Home Assistant using ESPHome and off-the-shelf components. This is intended as a Christmas present for my wife who stated she had never received a mixtape when she was younger.
 
 
 ## Parts used
