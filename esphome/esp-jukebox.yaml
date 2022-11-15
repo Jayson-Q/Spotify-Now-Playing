@@ -1,0 +1,156 @@
+esphome:
+  name: "esp-jukebox"
+
+# Board Type - TTGO ESP32 (ST7789V TFT LCD)
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: !secret ota_password
+
+# Network Connection Settings
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: 192.168.1.60
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Jukebox Wifi"
+    password: "ThisIsNotForMusicPlaying"
+
+captive_portal:
+
+# Example minimal configuration entry
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO19
+
+# Text Settings
+font:
+  - file: "LiberationMono.ttf"
+    id: liberation
+    size: 14
+  - file: "LiberationMono-Bold.ttf"
+    id: liberation_bold
+    size: 16
+
+# Text Sensors
+text_sensor:
+  - platform: homeassistant
+    name: "Now Playing Song on Spotify"
+    entity_id: sensor.spotify_song
+    id: spotify_song
+
+  - platform: homeassistant
+    name: "Now Playing Artist on Spotify"
+    entity_id: sensor.spotify_artist
+    id: spotify_artist
+
+  - platform: homeassistant
+    name: "Now Playing Album on Spotify"
+    entity_id: sensor.spotify_album
+    id: spotify_album
+
+# Graphics
+image:
+ #spotify.png
+  - file: "images/spotify.png"
+    id: spotify_logo
+    type: RGB24
+
+ #spotify.png
+  - file: "images/christmas.png"
+    id: christmas
+    type: RGB24
+
+# Screen Settings
+display:
+  - platform: st7789v
+    model: TTGO TDisplay 135x240
+    backlight_pin: GPIO4
+    cs_pin: GPIO5
+    dc_pin: GPIO16
+    reset_pin: GPIO23
+    rotation: 270
+    id: jukebox_display
+    pages:
+
+      - id: main_screen
+        lambda: |-
+          it.image(5, 5, id(spotify_logo));
+          it.print(5, 60, id(liberation_bold), id(spotify_song).state.c_str());
+          it.print(5, 86, id(liberation), id(spotify_artist).state.c_str());
+          it.print(5, 108, id(liberation), id(spotify_album).state.c_str());
+
+      - id: easter_egg
+        lambda: |-
+          it.image(0, 0, id(christmas));
+          it.print(120, 35, id(liberation_bold), TextAlign::CENTER, "EXAMPLE ONE");
+          it.print(120, 75, id(liberation), TextAlign::CENTER, "EXAMPLE TWO");
+          it.print(120, 108, id(liberation), TextAlign::CENTER, "EXAMPLE 3");
+
+# Change pages with Left Button
+binary_sensor:
+  - platform: gpio
+    pin: 
+      number: 0
+      inverted: True
+      mode: INPUT_PULLUP
+    name: left_button
+    on_click:
+      then:
+        - display.page.show: !lambda |-
+            static int page_num = 0;
+  
+            if (page_num == 2) {
+                page_num = 0;
+            }
+            page_num += 1;
+  
+            switch (page_num) {
+              case 1:
+                return id(main_screen);
+                break;
+              case 2:
+                return id(easter_egg);
+                break;
+              default:        //  added to avoid compiler warning/error
+                return id(main_screen);
+            }
+        - component.update: jukebox_display
+
+# Change pages with timed period between page changes
+#interval:
+#    - interval: 5s
+#      then:
+#        - display.page.show: !lambda |-
+#            static int page_num = 0;
+#  
+#            if (page_num == 2) {
+#                page_num = 0;
+#            }
+#            page_num += 1;
+# 
+#            switch (page_num) {
+#              case 1:
+#                return id(main_screen);
+#                break;
+#              case 2:
+#                return id(easter_egg);
+#                break;
+#              default:        //  added to avoid compiler warning/error
+#                return id(main_screen);
+#            }
+#        - component.update: jukebox_display

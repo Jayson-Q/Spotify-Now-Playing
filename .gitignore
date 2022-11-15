@@ -1,0 +1,5 @@
+#Exclude secrets.yaml
+*secrets*
+
+#include example secrets
+!secrets_SAMPLE.yaml

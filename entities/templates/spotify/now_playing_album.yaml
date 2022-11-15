@@ -1,0 +1,7 @@
+#####
+# Now Playing Album Sensor
+#####
+  
+- sensor:
+    - name: "Spotify Album"
+      state: "{{ state_attr('media_player.spotify_home_assistant', 'media_album_name') }}"

@@ -1,0 +1,7 @@
+#####
+# Now Playing Song Sensor
+#####
+  
+- sensor:
+    - name: "Spotify Song"
+      state: "{{ state_attr('media_player.spotify_home_assistant', 'media_title') }}"
