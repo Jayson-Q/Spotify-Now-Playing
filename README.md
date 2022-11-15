@@ -25,6 +25,6 @@ The TFT display on the Lillygo board is very clear and bright with easy visabili
 
 ## Pictures / Video
 
-
+![SpotifyNowPlaying](https://user-images.githubusercontent.com/68851601/201924545-12c760c9-283e-4254-9228-4fdef07ab300.png)
 
 
