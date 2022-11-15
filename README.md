@@ -18,7 +18,7 @@ It then displays these pages in a sequence with which change on either a button 
 Sensors are made to export the information using the Template option to conform to the latest best practice. My Home Assistant is setup with seperate files for each aspect to give granularity, and the file structure reflects this, however can be easily adapted.
 
 ## Construction
-The TFT display on the Lillygo board is very clear and bright with easy visability. Some fonts like Arial can be problematice due to typesetting issues.
+The TFT display on the Lillygo board is very clear and bright with easy visability. Some fonts like Arial can be problematic due to typesetting issues.
 
 ## Pictures / Video
 
